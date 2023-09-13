@@ -1,0 +1,41 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+      {
+        "type": "Microsoft.Web/sites",
+        "apiVersion": "2021-02-01",
+        "name": "[variables('webAppName')]",
+        "location": "[resourceGroup().location]",
+        "kind": "app",
+        "properties": {
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+        }
+      },
+      {
+        "type": "Microsoft.Web/serverfarms",
+        "apiVersion": "2021-02-01",
+        "name": "[variables('appServicePlanName')]",
+        "location": "[resourceGroup().location]",
+        "properties": {
+          "name": "[variables('appServicePlanName')]",
+          "computeMode": "Default",
+          "sku": {
+            "name": "S1",  // Choose an appropriate SKU
+            "tier": "Standard"
+          }
+        }
+      }
+    ],
+    "variables": {
+      "webAppName": "nomnivore",
+      "appServicePlanName": "your-app-service-plan-name"
+    },
+    "outputs": {
+      "webAppURL": {
+        "type": "string",
+        "value": "[concat('https://', variables('webAppName'), '.azurewebsites.net/')]"
+      }
+    }
+  }
+  
